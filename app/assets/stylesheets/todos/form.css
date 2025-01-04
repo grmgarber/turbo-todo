@@ -1,0 +1,8 @@
+form.button_to { display: inline-block }
+.delete-button {
+    background: red;
+    color: white;
+    height: 16px;
+    padding: 0 5px;
+    width: 16px;
+}

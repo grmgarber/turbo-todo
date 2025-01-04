@@ -1,6 +1,10 @@
 <li id="<%= "#{dom_id(todo)}_container" %>" class="py-2 px-4 border-b border-gray-300">
   <%= turbo_frame_tag dom_id(todo) do %>
     <%= link_to todo.name, edit_todo_path(todo) %>
+
+    <%= button_to todo_path(todo), method: :delete do %>
+      <span class="delete-button">x</span>
+    <% end %>
   <% end %>
 </li>
 
