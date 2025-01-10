@@ -1,9 +1,13 @@
 class TodosController < ApplicationController
-  before_action :set_todo, only: %i[ show edit update destroy ]
+  before_action :set_todo, only: %i[ show edit update destroy change_status ]
 
   # GET /todos or /todos.json
   def index
-    @todos = Todo.all
+    @todos = if params[:status] == 'incomplete' || params[:status].nil?
+      Todo.where(status: [ params[:status], nil ])
+    else
+      Todo.where(status: "complete")
+    end
   end
 
   # GET /todos/1 or /todos/1.json
@@ -57,6 +61,14 @@ class TodosController < ApplicationController
       format.turbo_stream { render turbo_stream: turbo_stream.remove("#{helpers.dom_id(@todo)}_container") }
       format.html { redirect_to todos_path, status: :see_other, notice: "Todo was successfully destroyed." }
       format.json { head :no_content }
+    end
+  end
+
+  def change_status
+    @todo.update(status: todo_params[:status])
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.remove("#{helpers.dom_id(@todo)}_container") }
+      format.html { redirect_to todos_path, notice: "Updated todo status." }
     end
   end
 

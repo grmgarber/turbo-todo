@@ -1,10 +1,24 @@
 <li id="<%= "#{dom_id(todo)}_container" %>" class="py-2 px-4 border-b border-gray-300">
   <%= turbo_frame_tag dom_id(todo) do %>
-    <%= link_to todo.name, edit_todo_path(todo) %>
+    <div>
+      <%= link_to todo.name, edit_todo_path(todo), class: (todo.complete? ? 'line-through' : '') %>
 
-    <%= button_to todo_path(todo), method: :delete do %>
-      <span class="delete-button">x</span>
-    <% end %>
+      <div class="flex justify-end space-x-3" style="display: inline-block; float: right">
+        <% if todo.complete? %>
+          <%= button_to change_status_todo_path(todo, todo: { status: 'incomplete' }), method: :patch do %>
+            <span style="background: navy; color: yellow; padding: 2px; margin: 2px 5px; border: 1px solid black">Mark as incomplete</span>
+          <% end %>
+        <% else %>
+          <%= button_to change_status_todo_path(todo, todo: { status: 'complete' }), method: :patch do %>
+            <span style="background: darkgreen; color: yellow; padding: 2px; margin: 2px 5px; border: 1px solid black">Mark as complete</span>
+          <% end %>
+        <% end %>
+
+        <%= button_to todo_path(todo), method: :delete, title: 'Delete' do %>
+          <span style="background: red; color: white; padding: 2px; margin: 2px 5px;">x</span>
+        <% end %>
+      </div>
+    </div>
   <% end %>
 </li>
 
